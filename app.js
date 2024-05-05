@@ -1,13 +1,16 @@
 const express = require('express');
 const app = express();
+const tutorRoutes = require('./routes/tutorRoutes');
+const studentRoutes = require('./routes/studentRoutes');
+const subjectRoutes = require('./routes/subjectRoutes');
 
-app.get('/', (req, res) => {
-  res.send('¡Hola, mundo!');
-});
+// Middleware
+app.use(express.json());
 
-app.get('/api', (req, res) => {
-  res.send('nueva url');
-});
+// Rutas
+app.use('/api/v1', tutorRoutes);
+app.use('/api/v1', studentRoutes);
+app.use('/api/v1', subjectRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
