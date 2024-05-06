@@ -1,6 +1,9 @@
 const db = require('../../connections/mysqldb.js');
 
-const Student = {};
+const Student = function(student) {
+    this.name = student.name;
+    this.registration = student.registration;
+};
 
 Student.getAll = (callback) => {
     const sql = 'SELECT * FROM students';
@@ -9,7 +12,6 @@ Student.getAll = (callback) => {
             callback(err, null);
             return;
         }
-        console.log(results)
         callback(null, results);
     });
 };
@@ -22,44 +24,60 @@ Student.create = (newStudent, callback) => {
             return;
         }
         newStudent.id = result.insertId;
-        console.log(newStudent)
-        console.log(result)
         callback(null, newStudent);
     });
 };
 
 Student.getAllSubjectsByStudent = (id, callback) => {
-    const sql = 'SELECT * FROM subjects WHERE student_id = ?';
+    const sql = `
+        SELECT s.name AS name, st.id AS student_id
+        FROM student_subject ss
+        JOIN subjects s ON ss.subject_id = s.id
+        JOIN students st ON ss.student_id = st.id
+        WHERE st.id = ?
+    `;
     db.query(sql, id, (err, result) => {
         if (err) {
             callback(err, null);
             return;
         }
-        console.log(result)
         callback(null, result);
     });
 };
 
-Student.assignSubjectToStudent = (id, listSubjects, callback) => {
-    for (let i = 0; i <= listSubjects.length; i++) {
-        const sql = 'SELECT * FROM subjects WHERE name = ? AND student_id = ?';
-        db.query(sql, [listSubjects[i], id],(err, results) => {
-            if (err) {
-                const sql = 'INSERT INTO subjects SET name = ?, student_id = ?';
-                db.query(sql, [listSubjects[i], id], (err, result) => {
-                    if (err) {
-                        callback(err);
-                        return;
-                    }
-                    console.log(result)
-                    callback(null, result);
-                });
-            } else {
-                console.log(results);
-                callback(null, results);
-            }
-        });
-    };
+Student.assignSubjectToStudent = (id, subjects, callback) => {
+    const sql = 'SELECT id FROM students WHERE id = ?'
+    db.query(sql, id, (err, results) => {
+        if (err) {
+            callback(err);
+            return;
+        }
+        if (results.length > 0) {
+            const sql = 'SELECT id FROM subjects WHERE name = ?'
+            db.query(sql, subjects,(err, result) => {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+                if (result.length > 0) {
+                    const sql = 'INSERT INTO student_subject SET student_id = ?, subject_id = ?'
+                    db.query(sql, [results[0].id, result[0].id], (err) => {
+                        if (err) {
+                            callback(err);
+                            return;
+                        }
+                        callback(null);
+                    });
+                }else{
+                    callback(result);
+                    return;
+                }
+            });
+        }else{
+            callback(results);
+            return;
+        }
+    });
 }
 
 module.exports = Student;

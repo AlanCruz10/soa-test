@@ -1,6 +1,9 @@
 const db = require('../../connections/mysqldb.js');
 
-const Subject = {};
+const Subject = function(subject) {
+    this.name = subject.name;
+};
+
 
 Subject.create = (newSubject, callback) => {
     const sql = 'INSERT INTO subjects SET ?';
@@ -10,8 +13,6 @@ Subject.create = (newSubject, callback) => {
             return;
         }
         newSubject.id = result.insertId;
-        console.log(newSubject)
-        console.log(result)
         callback(null, newSubject);
     });
 };

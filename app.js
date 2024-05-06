@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
-const tutorRoutes = require('./routes/tutorRoutes');
-const studentRoutes = require('./routes/studentRoutes');
-const subjectRoutes = require('./routes/subjectRoutes');
+const tutorRoutes = require('./src/routes/tutorRoutes');
+const studentRoutes = require('./src/routes/studentRoutes');
+const subjectRoutes = require('./src/routes/subjectRoutes');
 
 // Middleware
 app.use(express.json());

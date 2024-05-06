@@ -1,6 +1,8 @@
 const db = require('../../connections/mysqldb.js');
 
-const Tutor = {};
+const Tutor = function(tutor) {
+    this.name = tutor.name;
+  };
 
 Tutor.getAllTutors = (callback) => {
     const sql = 'SELECT * FROM tutors';
@@ -9,7 +11,6 @@ Tutor.getAllTutors = (callback) => {
             callback(err, null);
             return;
         }
-        console.log(results)
         callback(null, results);
     });
 };
@@ -22,8 +23,6 @@ Tutor.create = (newTutor, callback) => {
             return;
         }
         newTutor.id = result.insertId;
-        console.log(newTutor)
-        console.log(result)
         callback(null, newTutor);
     });
 };
@@ -35,24 +34,28 @@ Tutor.getAllStudentsByTutor = (id, callback) => {
             callback(err, null);
             return;
         }
-        console.log(result)
         callback(null, result);
     });
 };
 
-Tutor.assignStudentToTutor = (id, listStudents, callback) => {
-    for (let i = 0; i <= listStudents.length; i++) {
-        const sql = 'UPDATE students SET tutor_id = ? WHERE registration = ?';
-        db.query(sql, [id, listStudents[i]], (err, result) => {
-            if (err) {
-                callback(err);
-                return;
-            }
-            console.log(result)
-            
-        });
-    }
-    callback(null);
+Tutor.assignStudentToTutor = (id, students, callback) => {
+    const sql = `
+        UPDATE students s
+        LEFT JOIN tutors t ON s.tutor_id = t.id
+        SET s.tutor_id = CASE
+            WHEN s.tutor_id = ? THEN s.tutor_id
+            WHEN s.tutor_id IS NULL OR s.tutor_id != ? THEN ?
+        END
+        WHERE s.registration = ?
+    `;
+    
+    db.query(sql, [id, id, id, students], (err, result) => {
+        if (err) {
+            callback(err, null);
+            return;
+        }
+        callback(null, result);
+    });
 };
 
 module.exports = Tutor;
