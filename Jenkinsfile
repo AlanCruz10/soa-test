@@ -11,6 +11,8 @@ pipeline {
 
         stage('Actualizar repositorio') {
             steps {
+                def currentDir = sh(script: 'pwd', returnStdout: true).trim()
+                echo "El directorio actual es: ${currentDir}"
                 sh '''
                     if [ -d "/home/ubuntu/soa-test/.git" ]; then
                         echo 'El repositorio ya existe. Realizando git pull...'
