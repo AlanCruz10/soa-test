@@ -23,7 +23,7 @@ pipeline {
                     //     // Si no existe el directorio, realiza un git clone
                     echo 'Realizando git clone...'
                     // dir('/home/ubuntu') {
-                    sh 'git clone https://github.com/AlanCruz10/soa-test.git'
+                    sh 'git pull https://github.com/AlanCruz10/soa-test.git'
                         // }
                     // }
                 }
