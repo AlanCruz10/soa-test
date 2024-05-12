@@ -57,7 +57,6 @@ pipeline {
                         sh 'npm test'
                     } catch (err) {
                         currentBuild.result = 'FAILURE'
-                        error('Las pruebas han fallado')
                     }
                 }
                 // }

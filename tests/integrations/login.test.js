@@ -5,7 +5,7 @@ describe('Login test', () => {
     it('debería autenticar con credenciales válidas', (done) => {
         request(app)
             .post('/api/v1/login')
-            .send({ username: 'user_1', password: 'pass_1' })
+            .send({ username: 'user', password: 'pass' })
             .end((err, res) => {
                 if (err) return done(err);
                 if (res.status !== 200) {
