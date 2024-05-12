@@ -1,8 +1,7 @@
 pipeline {
     agent any
-
     stages {
-
+    
         stage('Verificar Docker') {
             steps {
                 sh 'docker --version'
@@ -52,14 +51,15 @@ pipeline {
                 sh 'npm install'
                 sh 'npm install --production'
                 sh 'npm install mocha'
-                script {
-                    def statusCode = sh(script: 'npm test', returnStatus: true) == 0
-                    if (statusCode == 0) {
-                        echo 'El comando se ejecutó correctamente'
-                    } else {
-                        echo 'El comando falló'
-                        currentBuild.result = 'FAILURE' // Marca el paso como fallido
-                    }
+                sh 'npm test'
+                // script {
+                //     def statusCode = sh(script: 'npm test', returnStatus: true) == 0
+                //     if (statusCode == 0) {
+                //         echo 'El comando se ejecutó correctamente'
+                //     } else {
+                //         echo 'El comando falló'
+                //         currentBuild.result = 'FAILURE' // Marca el paso como fallido
+                //     }
 
                     // try {
                     //     sh 'npm test && exit(1)'
@@ -88,6 +88,14 @@ pipeline {
                     echo 'Desplegando...'
                     // Inicia el contenedor con la nueva imagen
                     sh "docker run -d -p 3000:3000 --name soa-deploy-test soa-deploy:latest"
+                }
+            }
+    }
+    post {
+        always {
+            script {
+                if (currentBuild.result == 'FAILURE') {
+                    error('Uno o más pasos del pipeline han fallado.')
                 }
             }
         }
