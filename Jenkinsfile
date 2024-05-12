@@ -53,11 +53,19 @@ pipeline {
                 sh 'npm install --production'
                 sh 'npm install mocha'
                 script {
-                    try {
-                        sh 'npm test'
-                    } catch (err) {
-                        currentBuild.result = 'FAILURE'
+                    def statusCode = sh(script: 'npm test', returnStatus: true) == 0
+                    if (statusCode == 0) {
+                        echo 'El comando se ejecutó correctamente'
+                    } else {
+                        echo 'El comando falló'
+                        currentBuild.result = 'FAILURE' // Marca el paso como fallido
                     }
+
+                    // try {
+                    //     sh 'npm test && exit(1)'
+                    // } catch (err) {
+                    //     currentBuild.result = 'FAILURE'
+                    // }
                 }
                 // }
             }
