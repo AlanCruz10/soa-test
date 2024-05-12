@@ -55,9 +55,9 @@ pipeline {
                 script {
                     try {
                         sh 'npm test'
-                    } finally {
-                        currentBuild.result = 'ABORTED'
-                        error('Pruebas abortadas')
+                    } catch (err) {
+                        currentBuild.result = 'FAILURE'
+                        error('Las pruebas han fallado')
                     }
                 }
                 // }
