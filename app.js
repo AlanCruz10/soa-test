@@ -35,7 +35,7 @@ app.get('/api/v1/users/:user', (req, res) => {
 });
 
 app.get('/api', (req, res) => {
-    res.status(200).json({ message: 'Funciona' });
+    res.status(200).json({ message: 'UNNNNN' });
 });
 
 const PORT = process.env.PORT || 3000;
