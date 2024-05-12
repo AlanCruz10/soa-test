@@ -51,7 +51,7 @@ pipeline {
                 // dir('/home/ubuntu/soa-test') {
                 sh 'npm install'
                 sh 'npm install --production'
-                sh 'npm install --global mocha'
+                sh 'npm install mocha'
                 sh 'npm test'
                 // }
             }
