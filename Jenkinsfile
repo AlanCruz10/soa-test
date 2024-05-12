@@ -50,6 +50,7 @@ pipeline {
                 echo 'Ejecutando pruebas ...'
                 // dir('/home/ubuntu/soa-test') {
                 sh 'npm install'
+                sh 'npm install --production'
                 sh 'npm test'
                 // }
             }
