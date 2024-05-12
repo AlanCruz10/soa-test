@@ -66,7 +66,7 @@ pipeline {
                     // } catch (err) {
                     //     currentBuild.result = 'FAILURE'
                     // }
-                }
+                // }
                 // }
             }
         }
@@ -91,6 +91,7 @@ pipeline {
                 }
             }
     }
+}
     post {
         always {
             script {
