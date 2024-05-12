@@ -52,7 +52,14 @@ pipeline {
                 sh 'npm install'
                 sh 'npm install --production'
                 sh 'npm install mocha'
-                sh 'npm test'
+                script {
+                    try {
+                        sh 'npm test'
+                    } finally {
+                        currentBuild.result = 'ABORTED'
+                        error('Pruebas abortadas')
+                    }
+                }
                 // }
             }
         }

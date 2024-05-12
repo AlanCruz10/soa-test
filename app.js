@@ -43,4 +43,11 @@ app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
 
+process.on('SIGTERM', () => {
+  server.close(() => {
+      console.log('Servidor detenido');
+      process.exit(0);
+  });
+});
+
 module.exports = app
