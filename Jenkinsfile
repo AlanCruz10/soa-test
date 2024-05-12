@@ -2,17 +2,24 @@ pipeline {
     agent any
 
     stages {
+
+        stage('Verificar Docker') {
+            steps {
+                sh 'docker --version'
+            }
+        }
+
         stage('Actualizar repositorio') {
             steps {
                 script {
-                    if (fileExists("$WORKSPACE/soa-test/.git")) {
+                    if (fileExists("/home/ubuntu/soa-test/.git")) {
                         // Si ya existe el directorio, realiza un git pull
-                        dir("$WORKSPACE/soa-test") {
+                        dir("/home/ubuntu/soa-test") {
                             sh 'git pull'
                         }
                     } else {
                         // Si no existe el directorio, realiza un git clone
-                        dir('tu-directorio-local') {
+                        dir('/home/ubuntu') {
                             sh 'git clone https://github.com/AlanCruz10/soa-test.git'
                         }
                     }
@@ -24,9 +31,9 @@ pipeline {
             steps {
                 script {
                     // Verifica si la imagen ya existe antes de construirla
-                    def imageExists = sh(script: 'docker images -q soa-deploy', returnStatus: true) == 0
+                    def imageExists = sh(script: 'docker images -q soa-deploy:latest', returnStatus: true) == 0
                     if (!imageExists) {
-                        docker.build("soa-deploy")
+                        sh "docker build -t soa-deploy:latest /home/ubuntu/soa-test"
                     } else {
                         echo 'La imagen ya existe, no es necesario construirla nuevamente.'
                     }
@@ -36,8 +43,10 @@ pipeline {
 
         stage('Ejecutar pruebas') {
             steps {
-                sh 'npm install'
-                sh 'npm test'
+                dir('/home/ubuntu/soa-test') {
+                    sh 'npm install'
+                    sh 'npm test'
+                }
             }
         }
 
@@ -55,7 +64,7 @@ pipeline {
                         sh "docker rm soa-deploy-test"
                     }
                     // Inicia el contenedor con la nueva imagen
-                    sh "docker run -d -p 3000:3000 --name soa-deploy-test soa-deploy"
+                    sh "docker run -d -p 3000:3000 --name soa-deploy-test soa-deploy:latest"
                 }
             }
         }
