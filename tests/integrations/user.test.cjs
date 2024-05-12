@@ -4,7 +4,7 @@ const app = require('../../app.js');
 describe('User test', () => {
     it('debería obtener usuario existente', (done) => {
         request(app)
-            .get('/api/v1/users/user')
+            .get('/api/v1/users/userrrt')
             .end((err, res) => {
                 if (err) return done(err);
                 if (res.status !== 200) {
