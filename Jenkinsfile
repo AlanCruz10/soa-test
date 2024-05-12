@@ -22,8 +22,8 @@ pipeline {
                     // } else {
                     //     // Si no existe el directorio, realiza un git clone
                     echo 'Realizando git clone...'
-                        // dir('/home/ubuntu') {
-                    sh 'git https://github.com/AlanCruz10/soa-test.git'
+                    dir('/home/ubuntu') {
+                        sh 'git clone https://github.com/AlanCruz10/soa-test.git'
                         // }
                     }
                 }
@@ -76,4 +76,4 @@ pipeline {
             }
         }
     }
-// }
+}
