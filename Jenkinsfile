@@ -28,26 +28,22 @@ pipeline {
             }
         }
 
-        stage('Construir imagen Docker') {
+        stage('Building Image Docker') {
             steps {
                 script {
                     // Verifica si la imagen ya existe antes de construirla
-                    def imageExists = sh(script: '''
-                        if [ -n "$(docker images -q soa-deploy:latest)" ]; then
-                            exit 0
-                        else
-                            exit 1
-                        fi
-                    ''', returnStatus: true) == 0
-
+                    // def imageExists = sh(script: '''
+                    //     if [ -n "$(docker images -q soa-deploy:latest)" ]; then
+                    //         exit 0
+                    //     else
+                    //         exit 1
+                    //     fi
+                    // ''', returnStatus: true) == 0
                     def imageId = sh(script: 'docker images -q soa-deploy:latest', returnStdout: true).trim()
-                    echo "Imagen eliminada: ${imageId}"
-                    if (!imageExists) {
-                        echo "ECHO1"
-                    }else {
-                        echo "ECHO2"
+                    if (imageId != "") {
+                        sh "docker rmi ${imageId}"
                     }
-                    echo 'Construyendo la imagen Docker...'
+                    echo 'Building image docker...'
                     sh "docker build -t soa-deploy:latest ."
                 }
             }
