@@ -2,7 +2,10 @@ const db = require('../../connections/mysqldb.js');
 
 const Student = function(student) {
     this.name = student.name;
-    this.registration = student.registration;
+    this.email = student.email;
+    this.password = student.password;
+    this.status = student.status;
+    // this.registration = student.registration;
 };
 
 Student.getAll = (callback) => {
@@ -78,6 +81,21 @@ Student.assignSubjectToStudent = (id, subjects, callback) => {
             return;
         }
     });
+}
+
+Student.login = (user, callback) => {
+    const sql = 'SELECT * FROM students WHERE email = ?'
+    db.query(sql, user.email, (err, result) => {
+        if (err) {
+            callback(err);
+            return;
+        }
+        if (result.length > 0) {
+            callback(null, result);
+        }else{
+            callback(null, null);
+        }
+    })
 }
 
 module.exports = Student;

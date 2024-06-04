@@ -17,7 +17,10 @@ exports.getAllStudents = (req, res) => {
 exports.createStudent = (req, res) => {
     const newStudent = new Student({
         name: req.body.name,
-        registration: req.body.registration
+        // registration: req.body.registration
+        email: req.body.email,
+        password: req.body.password,
+        status: false
     });
     Student.create(newStudent, (err, student) => {
         if (err) {
@@ -44,7 +47,7 @@ exports.getAllSubjectsByStudent = (req, res) => {
 
 exports.assignSubjectToStudent = (req, res) => {
     const id = req.params.student;
-    const listSubjects = req.body.subjects; 
+    const listSubjects = req.body.subjects;
     const updatePromises = listSubjects.map(subject => {
         return new Promise((resolve, reject) => {
             Student.assignSubjectToStudent(id, subject, (err) => {
@@ -64,7 +67,30 @@ exports.assignSubjectToStudent = (req, res) => {
             if (err.length == 0) {
                 res.status(400).json({ error: "Not found student or subject" });
             }else{
-               res.status(400).json({ error: err.message }); 
+               res.status(400).json({ error: err.message });
             }
         });
 };
+
+exports.login = (req, res) => {
+    const user = {
+        email: req.body.email,
+        password: req.body.password
+    };
+    Student.login(user, (err, student) => {
+        if (err) {
+            res.status(400).json({ error: err.message });
+            return;
+        }
+        if (student.length == 0) {
+            res.status(400).json({ error: "Not found user" });
+            return;
+        }else{
+            if (student.email == user.email && student.password == user.password) {
+                res.status(200).json({ message: 'user logged' });
+            } else {
+                res.status(401).json({ error: 'invalid credentials' });
+            }
+        }
+    });
+}
