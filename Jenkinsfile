@@ -77,14 +77,14 @@ pipeline {
             steps {
                 script {
                     // Verifica si el contenedor ya está corriendo
-                    def containerRunning = sh(script: 'docker ps -q -f name=soa-deploy-test', returnStatus: true) == 0
-                    if (containerRunning) {
-                        echo 'Actualizando contenedor...'
-                        // Si el contenedor ya está corriendo, actualiza la imagen
-                        sh "sudo docker stop soa-deploy-test"
-                        sh "sudo docker rm soa-deploy-test"
-                    }
-                    echo 'Desplegando...'
+                    // def containerRunning = sh(script: 'docker ps -q -f name=soa-deploy-test', returnStatus: true) == 0
+                    // if (containerRunning) {
+                    //     echo 'Actualizando contenedor...'
+                    //     // Si el contenedor ya está corriendo, actualiza la imagen
+                    //     sh "sudo docker stop soa-deploy-test"
+                    //     sh "sudo docker rm soa-deploy-test"
+                    // }
+                    // echo 'Desplegando...'
                     // Inicia el contenedor con la nueva imagen
                     sh "sudo docker run -d -p 3000:3000 --name soa-deploy-test soa-deploy:latest"
                 }
