@@ -39,12 +39,12 @@ pipeline {
                     //         exit 1
                     //     fi
                     // ''', returnStatus: true) == 0
-                    // def imageId = sh(script: 'docker images -q <none>:<none>', returnStdout: true).trim()
-                    // if (imageId != "") {
-                    //     echo "${imageId}"
-                    // }
                     echo 'Building image docker...'
                     sh "docker build -t soa-deploy:latest ."
+                     def imageId = sh(script: 'docker images -q <none>:<none>', returnStdout: true).trim()
+                    if (imageId != "") {
+                        echo "${imageId}"
+                    }
                 }
             }
         }
