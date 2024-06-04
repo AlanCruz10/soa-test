@@ -1,4 +1,5 @@
 const Student = require('../persistance/models/student');
+const { use } = require('../routes/studentRoutes');
 
 exports.getAllStudents = (req, res) => {
     Student.getAll((err, students) => {
