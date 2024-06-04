@@ -34,6 +34,7 @@ pipeline {
                     // Verifica si la imagen ya existe antes de construirla
                     // def imageExists = sh(script: 'docker images -q soa-deploy:latest', returnStatus: true) == 0
                     // if (!imageExists) {
+                    sh "docker images -q soa-deploy:latest"
                     echo 'Construyendo la imagen Docker...'
                     sh "docker build -t soa-deploy:latest ."
                     // } else {
@@ -78,6 +79,7 @@ pipeline {
                 script {
                     // Verifica si el contenedor ya está corriendo
                     // def containerRunning = sh(script: 'docker ps -q -f name=soa-deploy-test', returnStatus: true) == 0
+                    sh "docker ps -q -f name=soa-deploy-test"
                     // if (containerRunning) {
                     //     echo 'Actualizando contenedor...'
                     //     // Si el contenedor ya está corriendo, actualiza la imagen
@@ -86,7 +88,10 @@ pipeline {
                     // }
                     // echo 'Desplegando...'
                     // Inicia el contenedor con la nueva imagen
-                    sh "docker run -d -p 3000:3000 --name soa-deploy-test soa-deploy:latest"
+                    // 1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537 = soa-deploy-test
+                    sh "docker stop 1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537"
+                    sh "docker rm 1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537"
+                    sh "docker run -d -p 3000:3000 --name 1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537 soa-deploy:latest"
                 }
             }
     }
