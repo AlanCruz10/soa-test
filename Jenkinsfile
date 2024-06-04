@@ -33,8 +33,11 @@ pipeline {
                 script {
                     // Verifica si la imagen ya existe antes de construirla
                     def imageExists = sh(script: 'docker images -q soa-deploy2:latest', returnStatus: true) == 0
-                    echo imageExists
-                    // if (!imageExists) {
+                    if (!imageExists) {
+                        echo "ECHO1"
+                    }else {
+                        echo "ECHO1"
+                    }
                     sh "docker images -q soa-deploy2:latest"
                     echo 'Construyendo la imagen Docker...'
                     sh "docker build -t soa-deploy:latest ."
