@@ -41,7 +41,7 @@ pipeline {
                     // ''', returnStatus: true) == 0
                     echo 'Building image docker...'
                     sh "docker build -t soa-deploy:latest ."
-                    def imageId = sh(script: 'docker images -q <none>:<none>', returnStdout: true).trim()
+                    def imageId = sh(script: 'docker images -q :', returnStdout: true).trim()
                     if (imageId != "") {
                         echo "${imageId}"
                     }
