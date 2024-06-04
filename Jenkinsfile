@@ -97,8 +97,8 @@ pipeline {
                     def contenerdorId = sh(script: 'docker ps -q -f name=soa-deploy-test', returnStdout: true).trim()
                     echo "Contenedor eliminado: ${contenerdorId}"
                     if (containerRunning != "") {
-                        sh "docker stop soa-deploy-test"
-                        sh "docker rm soa-deploy-test"
+                        sh "docker stop ${contenerdorId}"
+                        sh "docker rm ${contenerdorId}"
                     }
                     echo 'Desplegando...'
                     // Inicia el contenedor con la nueva imagen
