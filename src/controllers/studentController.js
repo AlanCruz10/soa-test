@@ -19,8 +19,7 @@ exports.createStudent = (req, res) => {
         name: req.body.name,
         // registration: req.body.registration
         email: req.body.email,
-        password: req.body.password,
-        status: false
+        password: req.body.password
     });
     Student.create(newStudent, (err, student) => {
         if (err) {

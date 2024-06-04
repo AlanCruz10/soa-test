@@ -4,7 +4,7 @@ const Student = function(student) {
     this.name = student.name;
     this.email = student.email;
     this.password = student.password;
-    this.status = student.status;
+    // this.status = student.status;
     // this.registration = student.registration;
 };
 
