@@ -100,7 +100,7 @@ pipeline {
                         sh "docker stop soa-deploy-test"
                         sh "docker rm soa-deploy-test"
                     }
-                    // echo 'Desplegando...'
+                    echo 'Desplegando...'
                     // Inicia el contenedor con la nueva imagen
                     // 1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537 = soa-deploy-test
                     // sh "docker stop 1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537"
