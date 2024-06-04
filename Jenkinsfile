@@ -39,9 +39,9 @@ pipeline {
                     //         exit 1
                     //     fi
                     // ''', returnStatus: true) == 0
-                    def imageId = sh(script: 'docker images -q soa-deploy:latest', returnStdout: true).trim()
+                    // def imageId = sh(script: 'docker images -q <none>:<none>', returnStdout: true).trim()
                     // if (imageId != "") {
-                    //     // sh "docker rmi ${imageId}"
+                    //     echo "${imageId}"
                     // }
                     echo 'Building image docker...'
                     sh "docker build -t soa-deploy:latest ."
@@ -102,6 +102,10 @@ pipeline {
                     // sh "docker run -d -p 3000:3000 --name 1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537 soa-deploy:latest"
                     sh "docker stop soa-deploy-test"
                     sh "docker rm soa-deploy-test"
+                    def imageId = sh(script: 'docker images -q <none>:<none>', returnStdout: true).trim()
+                    if (imageId != "") {
+                        echo "id imagen anterior ${imageId}"
+                    }
                     sh "docker rmi ${imageId}"
                     sh "docker run -d -p 3000:3000 --name soa-deploy-test soa-deploy:latest"
                 }
