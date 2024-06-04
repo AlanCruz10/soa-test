@@ -48,12 +48,6 @@ pipeline {
                             // sh "docker rmi ${imageId}"
                             sh "docker rmi soa-deploy:latest"
                         } else {
-                            sh "docker run -d -p 3000:3000 --name soa-deploy-test soa-deploy:latest"
-                            def cid = sh(script: 'docker ps -q -f name=soa-deploy-test', returnStdout: true).trim()
-                            if (cid != "") {
-                                sh "docker stop soa-deploy-test"
-                                sh "docker rm soa-deploy-test"
-                            }
                             sh "docker rmi soa-deploy:latest"
                         }
                     }
