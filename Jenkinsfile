@@ -32,9 +32,10 @@ pipeline {
             steps {
                 script {
                     // Verifica si la imagen ya existe antes de construirla
-                    // def imageExists = sh(script: 'docker images -q soa-deploy:latest', returnStatus: true) == 0
+                    def imageExists = sh(script: 'docker images -q soa-deploy:latest', returnStatus: true) == 0
+                    echo imageExists
                     // if (!imageExists) {
-                    sh "docker images -q soa-deploy:latest"
+                    sh "docker images -q soa-deploy2:latest"
                     echo 'Construyendo la imagen Docker...'
                     sh "docker build -t soa-deploy:latest ."
                     // } else {
@@ -79,7 +80,7 @@ pipeline {
                 script {
                     // Verifica si el contenedor ya está corriendo
                     // def containerRunning = sh(script: 'docker ps -q -f name=soa-deploy-test', returnStatus: true) == 0
-                    sh "docker ps -q -f name=soa-deploy-test"
+                    sh "docker ps -q -f name=1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537"
                     // if (containerRunning) {
                     //     echo 'Actualizando contenedor...'
                     //     // Si el contenedor ya está corriendo, actualiza la imagen
