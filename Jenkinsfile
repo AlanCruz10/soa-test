@@ -94,12 +94,12 @@ pipeline {
                     // def containerRunning = sh(script: 'docker ps -q -f name=soa-deploy-test', returnStatus: true) == 0
                     // sh "docker ps -q -f name=1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537"
                     // sh "docker ps -q -f name=soa-deploy-test"
-                    def contenerdorId = sh(script: 'docker ps -q -f name=soa-deploy-test', returnStdout: true).trim()
-                    echo "Contenedor eliminado: ${contenerdorId}"
-                    if (containerRunning != "") {
-                        sh "docker stop ${contenerdorId}"
-                        sh "docker rm ${contenerdorId}"
-                    }
+                    // def contenerdorId = sh(script: 'docker ps -q -f name=soa-deploy-test', returnStdout: true).trim()
+                    // echo "Contenedor eliminado: ${contenerdorId}"
+                    // if (containerRunning != "") {
+                    //     sh "docker stop ${contenerdorId}"
+                    //     sh "docker rm ${contenerdorId}"
+                    // }
                     echo 'Desplegando...'
                     // Inicia el contenedor con la nueva imagen
                     // 1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537 = soa-deploy-test
