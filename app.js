@@ -12,7 +12,7 @@ const studentRoutes = require('./src/routes/studentRoutes');
 // Middleware
 app.use(express.json());
 
-Rutas
+// Rutas
 // app.use('/api/v1', tutorRoutes);
 app.use('/api/v1', studentRoutes);
 // app.use('/api/v1', subjectRoutes);
