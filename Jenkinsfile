@@ -89,7 +89,7 @@ pipeline {
                     // Verifica si el contenedor ya está corriendo
                     // def containerRunning = sh(script: 'docker ps -q -f name=soa-deploy-test', returnStatus: true) == 0
                     // sh "docker ps -q -f name=1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537"
-                    sh "docker ps -q -f name=soa-deploy-test"
+                    // sh "docker ps -q -f name=soa-deploy-test"
                     def contenerdorId = sh(script: 'docker ps -q -f name=soa-deploy-test', returnStdout: true).trim()
                     echo "Contenedor eliminado: ${contenerdorId}"
                     // if (containerRunning) {
