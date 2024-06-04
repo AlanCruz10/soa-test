@@ -71,9 +71,9 @@ pipeline {
         // }
 
         stage('Desplegar imagen Docker') {
-            when {
-                expression { currentBuild.result == 'SUCCESS' }
-            }
+            // when {
+            //     expression { currentBuild.result == 'SUCCESS' }
+            // }
             steps {
                 script {
                     // Verifica si el contenedor ya está corriendo
@@ -81,23 +81,23 @@ pipeline {
                     // if (containerRunning) {
                     echo 'Actualizando contenedor...'
                         // Si el contenedor ya está corriendo, actualiza la imagen
-                    sh "docker stop soa-deploy-test"
-                    sh "docker rm soa-deploy-test"
+                    sh "sudo docker stop soa-deploy-test"
+                    sh "sudo docker rm soa-deploy-test"
                     // }
                     echo 'Desplegando...'
                     // Inicia el contenedor con la nueva imagen
-                    sh "docker run -d -p 3000:3000 --name soa-deploy-test soa-deploy:latest"
+                    sh "sudo docker run -d -p 3000:3000 --name soa-deploy-test soa-deploy:latest"
                 }
             }
     }
 }
-    post {
-        always {
-            script {
-                if (currentBuild.result == 'FAILURE') {
-                    error('Uno o más pasos del pipeline han fallado.')
-                }
-            }
-        }
-    }
+    // post {
+    //     always {
+    //         script {
+    //             if (currentBuild.result == 'FAILURE') {
+    //                 error('Uno o más pasos del pipeline han fallado.')
+    //             }
+    //         }
+    //     }
+    // }
 }
