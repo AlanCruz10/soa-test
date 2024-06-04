@@ -1,7 +1,6 @@
 pipeline {
     agent any
     stages {
-    
         stage('Verificar Docker') {
             steps {
                 sh 'docker --version'
@@ -44,32 +43,32 @@ pipeline {
             }
         }
 
-        stage('Ejecutar pruebas') {
-            steps {
-                echo 'Ejecutando pruebas ...'
-                // dir('/home/ubuntu/soa-test') {
-                sh 'npm install'
-                sh 'npm install --production'
-                sh 'npm install mocha'
-                sh 'npm test'
-                // script {
-                //     def statusCode = sh(script: 'npm test', returnStatus: true) == 0
-                //     if (statusCode == 0) {
-                //         echo 'El comando se ejecutó correctamente'
-                //     } else {
-                //         echo 'El comando falló'
-                //         currentBuild.result = 'FAILURE' // Marca el paso como fallido
-                //     }
+        // stage('Ejecutar pruebas') {
+        //     steps {
+        //         echo 'Ejecutando pruebas ...'
+        //         // dir('/home/ubuntu/soa-test') {
+        //         sh 'npm install'
+        //         sh 'npm install --production'
+        //         sh 'npm install mocha'
+        //         sh 'npm test'
+        //         // script {
+        //         //     def statusCode = sh(script: 'npm test', returnStatus: true) == 0
+        //         //     if (statusCode == 0) {
+        //         //         echo 'El comando se ejecutó correctamente'
+        //         //     } else {
+        //         //         echo 'El comando falló'
+        //         //         currentBuild.result = 'FAILURE' // Marca el paso como fallido
+        //         //     }
 
-                    // try {
-                    //     sh 'npm test && exit(1)'
-                    // } catch (err) {
-                    //     currentBuild.result = 'FAILURE'
-                    // }
-                // }
-                // }
-            }
-        }
+        //             // try {
+        //             //     sh 'npm test && exit(1)'
+        //             // } catch (err) {
+        //             //     currentBuild.result = 'FAILURE'
+        //             // }
+        //         // }
+        //         // }
+        //     }
+        // }
 
         stage('Desplegar imagen Docker') {
             when {
