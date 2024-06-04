@@ -86,7 +86,7 @@ pipeline {
                     // }
                     // echo 'Desplegando...'
                     // Inicia el contenedor con la nueva imagen
-                    sh "sudo docker run -d -p 3000:3000 --name soa-deploy-test soa-deploy:latest"
+                    sh "docker run -d -p 3000:3000 --name soa-deploy-test soa-deploy:latest"
                 }
             }
     }
