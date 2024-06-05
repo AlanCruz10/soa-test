@@ -35,7 +35,7 @@ app.use('/api/v1', studentRoutes);
 // });
 
 app.get('/api/v1/welcome', (req, res) => {
-    res.status(200).json({ message: 'Welcome to this Api ya 2' });
+    res.status(200).json({ message: 'Welcome to this Api ya 3' });
 });
 
 const PORT = process.env.PORT || 3000;
