@@ -61,9 +61,7 @@ pipeline {
                 sh 'npm install'
                 sh 'npm install --production'
                 sh 'npm install mocha'
-                // sh 'npm test'
-                def test = sh(script: 'npm test', returnStdout: true).trim()
-                echo "Test completed ${test}"
+                sh 'npm test'
                 // script {
                 //     def statusCode = sh(script: 'npm test', returnStatus: true) == 0
                 //     if (statusCode == 0) {
