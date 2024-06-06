@@ -1,13 +1,12 @@
 pipeline {
     agent any
     stages {
-        stage('Verificar Docker') {
+        stage('Check Docker') {
             steps {
                 sh 'docker --version'
             }
         }
-
-        stage('Actualizar repositorio') {
+        stage('Check Repository') {
             steps {
                 script {
                     // echo 'Verificando existencia del directorio...'
@@ -19,7 +18,7 @@ pipeline {
                     //     }
                     // } else {
                     //     // Si no existe el directorio, realiza un git clone
-                    echo 'Realizando git clone...'
+                    echo 'Cloning...'
                     // dir('/home/ubuntu') {
                     sh 'git pull https://github.com/AlanCruz10/soa-test.git'
                         // }
@@ -27,8 +26,7 @@ pipeline {
                 }
             }
         }
-
-        stage('Building Image Docker') {
+        stage('Build') {
             steps {
                 script {
                     // Verifica si la imagen ya existe antes de construirla
@@ -56,35 +54,36 @@ pipeline {
                 }
             }
         }
+        stage('Test') {
+            steps {
+                echo 'Testing ...'
+                // dir('/home/ubuntu/soa-test') {
+                sh 'npm install'
+                sh 'npm install --production'
+                sh 'npm install mocha'
+                // sh 'npm test'
+                def test = sh(script: 'npm test', returnStdout: true).trim()
+                echo "Test completed ${test}"
+                // script {
+                //     def statusCode = sh(script: 'npm test', returnStatus: true) == 0
+                //     if (statusCode == 0) {
+                //         echo 'El comando se ejecutó correctamente'
+                //     } else {
+                //         echo 'El comando falló'
+                //         currentBuild.result = 'FAILURE' // Marca el paso como fallido
+                //     }
 
-        // stage('Ejecutar pruebas') {
-        //     steps {
-        //         echo 'Ejecutando pruebas ...'
-        //         // dir('/home/ubuntu/soa-test') {
-        //         sh 'npm install'
-        //         sh 'npm install --production'
-        //         sh 'npm install mocha'
-        //         sh 'npm test'
-        //         // script {
-        //         //     def statusCode = sh(script: 'npm test', returnStatus: true) == 0
-        //         //     if (statusCode == 0) {
-        //         //         echo 'El comando se ejecutó correctamente'
-        //         //     } else {
-        //         //         echo 'El comando falló'
-        //         //         currentBuild.result = 'FAILURE' // Marca el paso como fallido
-        //         //     }
+                    // try {
+                    //     sh 'npm test && exit(1)'
+                    // } catch (err) {
+                    //     currentBuild.result = 'FAILURE'
+                    // }
+                // }
+                // }
+            }
+        }
 
-        //             // try {
-        //             //     sh 'npm test && exit(1)'
-        //             // } catch (err) {
-        //             //     currentBuild.result = 'FAILURE'
-        //             // }
-        //         // }
-        //         // }
-        //     }
-        // }
-
-        stage('Desplegar imagen Docker') {
+        stage('Deploy') {
             // when {
             //     expression { currentBuild.result == 'SUCCESS' }
             // }
@@ -100,7 +99,7 @@ pipeline {
                     //     sh "docker stop ${contenerdorId}"
                     //     sh "docker rm ${contenerdorId}"
                     // }
-                    echo 'Desplegando...'
+                    echo 'Deploying...'
                     // Inicia el contenedor con la nueva imagen
                     // 1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537 = soa-deploy-test
                     // sh "docker stop 1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537"
