@@ -35,7 +35,7 @@ app.get('/api/v1/users/:user', (req, res) => {
 });
 
 app.get('/api/v1/welcome', (req, res) => {
-    res.status(200).json({ message: 'Welcome to this Api ya 3' });
+    res.status(200).json({ message: 'Welcome to this Api ya 4' });
 });
 
 const PORT = process.env.PORT || 3000;
