@@ -115,17 +115,13 @@ pipeline {
 
 post {
         success {
-            stage('Deploy') {
-                steps {
-                    script {
-                        def containerRunning = sh(script: 'docker ps -q -f name=soa-deploy-test', returnStdout: true).trim()
-                        if (containerRunning) {
-                            sh "docker stop soa-deploy-test"
-                            sh "docker rm soa-deploy-test"
-                        }
-                        sh "docker run -d -p 3000:3000 --name soa-deploy-test soa-deploy:latest"
-                    }
+            script {
+                def containerRunning = sh(script: 'docker ps -q -f name=soa-deploy-test', returnStdout: true).trim()
+                if (containerRunning) {
+                    sh "docker stop soa-deploy-test"
+                    sh "docker rm soa-deploy-test"
                 }
+                sh "docker run -d -p 3000:3000 --name soa-deploy-test soa-deploy:latest"
             }
         }
         failure {
