@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "mocha tests/integrations --recursive"
+    "test": "mocha tests/integrations --recursive --exit"
   },
   "keywords": [],
   "author": "",

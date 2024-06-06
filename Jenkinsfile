@@ -61,7 +61,9 @@ pipeline {
                 sh 'npm install'
                 sh 'npm install --production'
                 sh 'npm install mocha'
-                sh 'npm test'
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                    sh 'npm test'
+                }
                 // script {
                 //     def statusCode = sh(script: 'npm test', returnStatus: true) == 0
                 //     if (statusCode == 0) {
@@ -81,35 +83,56 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
-            // when {
-            //     expression { currentBuild.result == 'SUCCESS' }
-            // }
-            steps {
-                script {
-                    // Verifica si el contenedor ya está corriendo
-                    // def containerRunning = sh(script: 'docker ps -q -f name=soa-deploy-test', returnStatus: true) == 0
-                    // sh "docker ps -q -f name=1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537"
-                    // sh "docker ps -q -f name=soa-deploy-test"
-                    // def contenerdorId = sh(script: 'docker ps -q -f name=soa-deploy-test', returnStdout: true).trim()
-                    // echo "Contenedor eliminado: ${contenerdorId}"
-                    // if (containerRunning != "") {
-                    //     sh "docker stop ${contenerdorId}"
-                    //     sh "docker rm ${contenerdorId}"
-                    // }
-                    echo 'Deploying...'
-                    // Inicia el contenedor con la nueva imagen
-                    // 1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537 = soa-deploy-test
-                    // sh "docker stop 1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537"
-                    // sh "docker rm 1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537"
-                    // sh "docker run -d -p 3000:3000 --name 1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537 soa-deploy:latest"
-                    // sh "docker stop soa-deploy-test"
-                    // sh "docker rm soa-deploy-test"
-                    sh "docker run -d -p 3000:3000 --name soa-deploy-test soa-deploy:latest"
+    //     stage('Deploy') {
+    //         // when {
+    //         //     expression { currentBuild.result == 'SUCCESS' }
+    //         // }
+    //         steps {
+    //             script {
+    //                 // Verifica si el contenedor ya está corriendo
+    //                 // def containerRunning = sh(script: 'docker ps -q -f name=soa-deploy-test', returnStatus: true) == 0
+    //                 // sh "docker ps -q -f name=1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537"
+    //                 // sh "docker ps -q -f name=soa-deploy-test"
+    //                 // def contenerdorId = sh(script: 'docker ps -q -f name=soa-deploy-test', returnStdout: true).trim()
+    //                 // echo "Contenedor eliminado: ${contenerdorId}"
+    //                 // if (containerRunning != "") {
+    //                 //     sh "docker stop ${contenerdorId}"
+    //                 //     sh "docker rm ${contenerdorId}"
+    //                 // }
+    //                 echo 'Deploying...'
+    //                 // Inicia el contenedor con la nueva imagen
+    //                 // 1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537 = soa-deploy-test
+    //                 // sh "docker stop 1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537"
+    //                 // sh "docker rm 1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537"
+    //                 // sh "docker run -d -p 3000:3000 --name 1c17aed9e12545ecb784479826baae18bd30424a36a946f3133a11ed798ec537 soa-deploy:latest"
+    //                 // sh "docker stop soa-deploy-test"
+    //                 // sh "docker rm soa-deploy-test"
+    //                 sh "docker run -d -p 3000:3000 --name soa-deploy-test soa-deploy:latest"
+    //             }
+    //         }
+    // }
+}
+
+post {
+        success {
+            stage('Deploy') {
+                steps {
+                    script {
+                        def containerRunning = sh(script: 'docker ps -q -f name=soa-deploy-test', returnStdout: true).trim()
+                        if (containerRunning) {
+                            sh "docker stop soa-deploy-test"
+                            sh "docker rm soa-deploy-test"
+                        }
+                        sh "docker run -d -p 3000:3000 --name soa-deploy-test soa-deploy:latest"
+                    }
                 }
             }
+        }
+        failure {
+            echo 'Build failed. No deployment will be done.'
+        }
     }
-}
+
     // post {
     //     always {
     //         script {
